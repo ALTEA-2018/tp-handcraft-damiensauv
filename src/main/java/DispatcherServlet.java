@@ -37,7 +37,7 @@ public class DispatcherServlet extends HttpServlet {
         if (controllerClass.getAnnotation(Controller.class) instanceof Controller) {
             Method[] methods = controllerClass.getMethods();
             for (Method m : methods) {
-                this.registerMethod(m);
+                    this.registerMethod(m);
             }
         } else {
             throw new IllegalArgumentException();
@@ -48,6 +48,9 @@ public class DispatcherServlet extends HttpServlet {
     protected void registerMethod(Method method) {
         System.out.println("##########  Registering method " + method.getName());
         Annotation[] declaredAnnotations = method.getAnnotations();
+
+        if (method.getReturnType().equals(void.class))
+            return;
 
         for (Annotation a : declaredAnnotations) {
             if (a instanceof RequestMapping) {
