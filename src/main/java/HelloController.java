@@ -1,3 +1,6 @@
+import com.miage.altea.servlet.Controller;
+import com.miage.altea.servlet.RequestMapping;
+
 @Controller
 public class HelloController {
 

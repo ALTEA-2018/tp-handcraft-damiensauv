@@ -1,3 +1,6 @@
+import com.miage.altea.servlet.Controller;
+import com.miage.altea.servlet.RequestMapping;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
