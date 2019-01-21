@@ -11,7 +11,7 @@ import java.util.Map;
 public class PokemonTypeController {
     private PokemonTypeRepository repository = new PokemonTypeRepository();
 
-    @RequestMapping(uri = "/pokemons")
+    @RequestMapping(uri = "/pokemon")
     public PokemonType getPokemon(Map<String, String[]> parameters) {
 
         if (parameters == null)

@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.miage.altea.controller.PokemonTypeController;
 import com.miage.altea.servlet.Controller;
 import com.miage.altea.servlet.RequestMapping;
@@ -35,16 +36,17 @@ public class DispatcherServlet extends HttpServlet {
         try {
             Object o = m.getDeclaringClass().getDeclaredConstructor().newInstance();
 
-            String invoke;
+            Object invoke;
 
             Map<String, String[]> queryString = req.getParameterMap();
             if (queryString.size() > 0)
-                invoke = (String) m.invoke(o, queryString);
+                invoke = m.invoke(o, queryString);
             else
-                invoke = (String) m.invoke(o);
+                invoke = m.invoke(o);
 
-
-            resp.getWriter().print(invoke);
+            var objectMapper = new ObjectMapper();
+            var json = objectMapper.writeValueAsString(invoke);
+            resp.getWriter().print(json);
 
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();

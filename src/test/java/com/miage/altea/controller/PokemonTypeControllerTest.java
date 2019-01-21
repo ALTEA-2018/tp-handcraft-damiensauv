@@ -92,7 +92,7 @@ class PokemonTypeControllerTest {
                 getPokemonMethod.getAnnotation(RequestMapping.class);
 
         assertNotNull(requestMappingAnnotation);
-        assertEquals("/pokemons", requestMappingAnnotation.uri());
+        assertEquals("/pokemon", requestMappingAnnotation.uri());
     }
 
 }
