@@ -1,6 +1,5 @@
 package com.miage.altea.repository;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.miage.altea.bo.PokemonType;
 
@@ -27,22 +26,17 @@ public class PokemonTypeRepository {
     public PokemonType findPokemonById(int id) {
         System.out.println("Loading Pokemon information for Pokemon id " + id);
 
-        PokemonType pokemonType = this.pokemons.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
 
-        System.out.println("### " + pokemonType.getId());
-
-        return pokemonType;
+        return this.pokemons.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
     }
 
     public PokemonType findPokemonByName(String name) {
         System.out.println("Loading Pokemon information for Pokemon name " + name);
 
-        // TODO
-        return null;
+        return this.pokemons.stream().filter(x -> name.equals(x.getName())).findFirst().orElse(null);
     }
 
     public List<PokemonType> findAllPokemon() {
-        // TODO
-        return null;
+        return this.pokemons;
     }
 }
