@@ -4,7 +4,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,11 +17,23 @@ public class DispatcherServlet extends HttpServlet {
     private Map<String, Method> uriMappings = new HashMap<>();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         System.out.println("########## Getting request for " + req.getRequestURI());
 
+        String uri = req.getRequestURI();
+        Method m = this.getMappingForUri(uri);
 
-        // TODO
+        if (m == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "no mapping found for request uri " + uri);
+            return;
+        }
+
+        System.out.println("DEbug " + m.getName());
+
+
+
+        // todo
+
     }
 
     @Override

@@ -1,8 +1,13 @@
 import org.junit.jupiter.api.Test;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class DispatcherServletTest {
 
@@ -55,6 +60,89 @@ class DispatcherServletTest {
         assertEquals("sayHello", servlet.getMappingForUri("/hello").getName());
         assertEquals("sayGoodBye", servlet.getMappingForUri("/bye").getName());
         assertEquals("explode", servlet.getMappingForUri("/boum").getName());
+    }
+
+    @Test
+    void doGet_shouldReturn404_whenNotMethodIsFound() throws IOException {
+        var servlet = new DispatcherServlet();
+
+        var req = mock(HttpServletRequest.class);
+        var resp = mock(HttpServletResponse.class);
+        when(req.getRequestURI()).thenReturn("/test");
+
+        servlet.doGet(req, resp);
+
+        verify(resp).sendError(404, "no mapping found for request uri /test");
+    }
+
+    @Test
+    void doGet_shouldReturn500WithMessage_whenMethodThrowsException() throws IOException {
+        var servlet = new DispatcherServlet();
+
+        servlet.registerController(SomeControllerClass.class);
+
+        var req = mock(HttpServletRequest.class);
+        var resp = mock(HttpServletResponse.class);
+        when(req.getRequestURI()).thenReturn("/test-throwing");
+
+        servlet.doGet(req, resp);
+
+        verify(resp).sendError(500,
+                "exception when calling method someThrowingMethod : some exception message");
+    }
+
+    @Test
+    void doGet_shouldReturnAResult_whenMethodSucceeds() throws IOException {
+        var servlet = new DispatcherServlet();
+
+        servlet.registerController(SomeControllerClass.class);
+
+        var req = mock(HttpServletRequest.class);
+        var resp = mock(HttpServletResponse.class);
+        var printWriter = mock(PrintWriter.class);
+
+        when(resp.getWriter()).thenReturn(printWriter);
+        when(req.getRequestURI()).thenReturn("/test");
+
+        servlet.doGet(req, resp);
+
+        verify(printWriter).print("Hello");
+    }
+
+    @Test
+    void doGet_shouldReturnAResult_whenMethodWithParametersSucceeds() throws IOException {
+        var servlet = new DispatcherServlet();
+
+        servlet.registerController(SomeControllerClass.class);
+
+        var req = mock(HttpServletRequest.class);
+        var resp = mock(HttpServletResponse.class);
+        var printWriter = mock(PrintWriter.class);
+
+        when(req.getRequestURI()).thenReturn("/test-with-params");
+        when(req.getParameterMap()).thenReturn(Map.of("id", new String[]{"12"}));
+        when(resp.getWriter()).thenReturn(printWriter);
+
+        servlet.doGet(req, resp);
+
+        verify(printWriter).print("12");
+    }
+
+    @Test
+    void doGet_shouldReturnAResult_forHelloController() throws IOException {
+        var servlet = new DispatcherServlet();
+        servlet.registerController(HelloController.class);
+
+        var req = mock(HttpServletRequest.class);
+        var resp = mock(HttpServletResponse.class);
+        var printWriter = mock(PrintWriter.class);
+
+        when(req.getRequestURI()).thenReturn("/hello");
+        when(resp.getWriter()).thenReturn(printWriter);
+
+        servlet.doGet(req, resp);
+
+        verify(printWriter).print("Hello World !");
     }
 }
 
