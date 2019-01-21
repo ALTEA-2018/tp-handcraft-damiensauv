@@ -108,7 +108,7 @@ class DispatcherServletTest {
 
         servlet.doGet(req, resp);
 
-        verify(printWriter).print("Hello");
+        verify(printWriter).print("\"Hello\"");
     }
 
     @Test
@@ -127,7 +127,7 @@ class DispatcherServletTest {
 
         servlet.doGet(req, resp);
 
-        verify(printWriter).print("12");
+        verify(printWriter).print("\"12\"");
     }
 
     @Test
@@ -144,7 +144,7 @@ class DispatcherServletTest {
 
         servlet.doGet(req, resp);
 
-        verify(printWriter).print("Hello World !");
+        verify(printWriter).print("\"Hello World !\"");
     }
 }
 
