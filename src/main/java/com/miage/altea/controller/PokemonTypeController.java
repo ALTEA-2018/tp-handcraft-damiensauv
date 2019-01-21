@@ -6,7 +6,6 @@ import com.miage.altea.servlet.Controller;
 import com.miage.altea.servlet.RequestMapping;
 
 import java.util.Map;
-import java.util.Set;
 
 @Controller
 public class PokemonTypeController {
@@ -23,9 +22,9 @@ public class PokemonTypeController {
         Map.Entry<String, String[]> p = parameters.entrySet().iterator().next();
         String key = p.getKey();
         String[] value = p.getValue();
-        if ("id".equals(key)){
-           return this.repository.findPokemonById(Integer.parseInt(value[0]));
-        }else if ("name".equals(key)){
+        if ("id".equals(key)) {
+            return this.repository.findPokemonById(Integer.parseInt(value[0]));
+        } else if ("name".equals(key)) {
             return this.repository.findPokemonByName(value[0]);
         }
 
