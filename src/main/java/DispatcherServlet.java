@@ -1,3 +1,4 @@
+import com.miage.altea.controller.PokemonTypeController;
 import com.miage.altea.servlet.Controller;
 import com.miage.altea.servlet.RequestMapping;
 
@@ -59,7 +60,7 @@ public class DispatcherServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         // on enregistre notre controller au démarrage de la servlet
-        this.registerController(HelloController.class);
+        this.registerController(PokemonTypeController.class);
     }
 
     protected void registerController(Class controllerClass) {
