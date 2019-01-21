@@ -27,8 +27,11 @@ public class PokemonTypeRepository {
     public PokemonType findPokemonById(int id) {
         System.out.println("Loading Pokemon information for Pokemon id " + id);
 
-        // TODO
-        return null;
+        PokemonType pokemonType = this.pokemons.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
+
+        System.out.println("### " + pokemonType.getId());
+
+        return pokemonType;
     }
 
     public PokemonType findPokemonByName(String name) {
