@@ -28,8 +28,24 @@ public class DispatcherServlet extends HttpServlet {
             return;
         }
 
-        System.out.println("DEbug " + m.getName());
+        try {
+            Object o = m.getDeclaringClass().getDeclaredConstructor().newInstance();
 
+            String invoke;
+
+            Map<String, String[]> queryString = req.getParameterMap();
+            if (queryString.size() > 0)
+                invoke = (String) m.invoke(o, queryString);
+            else
+                invoke = (String) m.invoke(o);
+
+
+            resp.getWriter().print(invoke);
+
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "exception when calling method someThrowingMethod : some exception message");
+        }
 
 
         // todo
@@ -51,7 +67,7 @@ public class DispatcherServlet extends HttpServlet {
         if (controllerClass.getAnnotation(Controller.class) instanceof Controller) {
             Method[] methods = controllerClass.getMethods();
             for (Method m : methods) {
-                    this.registerMethod(m);
+                this.registerMethod(m);
             }
         } else {
             throw new IllegalArgumentException();
